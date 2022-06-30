@@ -12,7 +12,7 @@ public class MagnetBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //magnetRigidBody = GetComponent<Rigidbody2D>();
+        magnetRigidBody = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -36,7 +36,7 @@ public class MagnetBehaviour : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (magnetWithPlayer == false)
+            if (distance.magnitude < 3f && magnetWithPlayer == false)
             {
                 MagnetPickup();
             }
@@ -53,16 +53,21 @@ public class MagnetBehaviour : MonoBehaviour
     
     void MagnetPickup()
     {
-        Destroy(magnetRigidBody);
+        // Destroy(magnetRigidBody);
+        magnetRigidBody.isKinematic = true;
+        magnetRigidBody.simulated = false;
         transform.SetParent(magnetPosition.transform);
-        transform.localPosition = new Vector2(0, 0.5f);
+        // transform.localPosition = new Vector2(0, 0.5f);
+        transform.position = magnetPosition.transform.position;
         PickUpMessage.gameObject.SetActive(false);
         magnetWithPlayer = true;
     }
     void ThrowTheMagnet()
     {
         transform.parent = null;
-        magnetRigidBody =  gameObject.AddComponent<Rigidbody2D>()  ;
+        //magnetRigidBody =  gameObject.AddComponent<Rigidbody2D>()  ;
+        magnetRigidBody.isKinematic = false;
+        magnetRigidBody.simulated = true;
         magnetRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation ;
         magnetRigidBody.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         PickUpMessage.gameObject.SetActive(true);

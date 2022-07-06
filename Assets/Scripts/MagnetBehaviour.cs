@@ -21,6 +21,7 @@ public class MagnetBehaviour : MonoBehaviour
     {
         magnetRigidBody = GetComponent<Rigidbody2D>();
         blueMagnet.gameObject.SetActive(false);
+
     }
 
     // Update is called once per frame

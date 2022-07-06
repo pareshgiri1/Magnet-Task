@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MagnetBehaviour : MonoBehaviour
 {
@@ -9,10 +10,17 @@ public class MagnetBehaviour : MonoBehaviour
     public GameObject magnetPosition;
     bool magnetWithPlayer;
     Rigidbody2D magnetRigidBody;
+    public GameObject redMagnet;
+    public GameObject blueMagnet;
+    bool activated;
+    bool IsRed = true;
+    float restartTime = 1;
+
     // Start is called before the first frame update
     void Start()
     {
         magnetRigidBody = GetComponent<Rigidbody2D>();
+        blueMagnet.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -20,7 +28,9 @@ public class MagnetBehaviour : MonoBehaviour
     {
         //PickUpMessage.gameObject.SetActive(true);
         Vector3 distance = PlayerBehaviour.instance.transform.position - transform.position;
-        //if(Vector2.Distance(PlayerBehaviour.instance.transform.position , transform.position) <= 1) 
+        //if(Vector2.Distance(PlayerBehaviour.instance.transform.position , transform.position) <= 1)
+
+        // for when see message of pick up magnet
         if (distance.magnitude < 3f && magnetWithPlayer == false)
         {
             //Mathf.Abs(distance.magnitude)
@@ -33,17 +43,46 @@ public class MagnetBehaviour : MonoBehaviour
             PickUpMessage.gameObject.SetActive(false);
         }
 
-
+        // For Drop and pick up magnet
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (distance.magnitude < 3f && magnetWithPlayer == false)
             {
                 MagnetPickup();
+                activated = true;
             }
             else
             {
                
                 ThrowTheMagnet();
+            }
+        }
+        // For Change Magnet Polarity
+        if(Input.GetKeyDown(KeyCode.F) && activated)
+        {
+            if(IsRed)
+            {
+                blueMagnet.gameObject.SetActive(true);
+                redMagnet.gameObject.SetActive(false);
+                IsRed = false;
+            }
+            else
+            {
+                blueMagnet.gameObject.SetActive(false);
+                redMagnet.gameObject.SetActive(true);
+                IsRed = true;
+            }
+            
+        }
+        // for the restart
+        if(Input.GetKey(KeyCode.LeftControl))
+        {
+            restartTime -= Time.deltaTime;
+            //Debug.Log(restartTime);
+            if(restartTime <=0)
+            {
+                SceneManager.LoadScene(0);
+                restartTime = 1;
             }
         }
 

@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - Positive
+  - Negative
+  - RedSwitch
+  - GreenSwitch
   layers:
   - Default
   - TransparentFX
